@@ -1,0 +1,3 @@
+﻿  main.cpp
+main.obj : error LNK2019: unresolved external symbol __imp__Add@16 referenced in function _main
+C:\Users\paran\documents\visual studio 2017\Projects\delaunay_utils\Debug\delaunay_utils_client.exe : fatal error LNK1120: 1 unresolved externals
