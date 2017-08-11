@@ -212,16 +212,12 @@ inline Triangle* Utils::MakeSimplex(Edge * f, std::vector<Vertex*>& pointset, do
 		// buduj tylko sciane
 		if (!IsIntersected(f->v1, best, alfa) && !IsIntersected(f->v2, best, alfa))
 		{
-
-
 			return nullptr;
-
-
 		}
+
 		Edge *e1, *e2;
 		e1 = new Edge(f->v1, best);
 		e2 = new Edge(f->v2, best);
-
 
 		Vector origin(Utils::CenterOfMass(f->v1, f->v2, best));
 		e1->setOrigin(origin);

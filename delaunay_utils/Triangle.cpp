@@ -11,7 +11,7 @@ Triangle::Triangle()
 	e2 = nullptr;
 
 	IRenderable::mutex.lock();
-	IRenderable::renderables.push_back(this);
+	IRenderable::triangles.push_back(this);
 	IRenderable::mutex.unlock();
 }
 

@@ -8,6 +8,6 @@ class IRenderable
 {
 public:
 	static std::mutex mutex;
-	static std::vector<Triangle*> renderables;
+	static std::vector<Triangle*> triangles;
 };
 

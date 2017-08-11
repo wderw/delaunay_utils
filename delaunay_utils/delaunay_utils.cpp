@@ -25,22 +25,28 @@ int DELAUNAYLIBRARY_API delaunay_dc(point_t* input, int input_size)
 	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
 	std::cout << "elapsed time: " << elapsed_secs << std::endl;
 
-	printf("renderables: %d \n", IRenderable::renderables.size());
+	printf("renderables: %d \n", IRenderable::triangles.size());
 
 	std::ofstream myfile;
 	myfile.open("triangles.txt", std::ios::app);
 
-	for (int i = 0; i < IRenderable::renderables.size(); i++)
+	for (int i = 0; i < IRenderable::triangles.size(); i++)
 	{
-		Triangle* t = IRenderable::renderables[i];
+		Triangle* t = IRenderable::triangles[i];
 		myfile << t->e0->v1->position.x << std::endl;
 		myfile << t->e0->v1->position.y << std::endl;
+		myfile << t->e0->v2->position.x << std::endl;
+		myfile << t->e0->v2->position.y << std::endl;
 
 		myfile << t->e1->v1->position.x << std::endl;
 		myfile << t->e1->v1->position.y << std::endl;
+		myfile << t->e1->v2->position.x << std::endl;
+		myfile << t->e1->v2->position.y << std::endl;
 
 		myfile << t->e2->v1->position.x << std::endl;
 		myfile << t->e2->v1->position.y << std::endl;
+		myfile << t->e2->v2->position.x << std::endl;
+		myfile << t->e2->v2->position.y << std::endl;
 	}
 
 	myfile.close();
