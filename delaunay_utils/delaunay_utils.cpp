@@ -1,4 +1,7 @@
 #include "delaunay_utils.h"
+#include "Triangle.h"
+#include <iostream>
+#include <fstream>
 
 int DELAUNAYLIBRARY_API delaunay_dc(point_t* input, int input_size)
 {
@@ -24,5 +27,22 @@ int DELAUNAYLIBRARY_API delaunay_dc(point_t* input, int input_size)
 
 	printf("renderables: %d \n", IRenderable::renderables.size());
 
+	std::ofstream myfile;
+	myfile.open("triangles.txt", std::ios::app);
+
+	for (int i = 0; i < IRenderable::renderables.size(); i++)
+	{
+		Triangle* t = IRenderable::renderables[i];
+		myfile << t->e0->v1->position.x << std::endl;
+		myfile << t->e0->v1->position.y << std::endl;
+
+		myfile << t->e1->v1->position.x << std::endl;
+		myfile << t->e1->v1->position.y << std::endl;
+
+		myfile << t->e2->v1->position.x << std::endl;
+		myfile << t->e2->v1->position.y << std::endl;
+	}
+
+	myfile.close();
 	return result.size();
 }

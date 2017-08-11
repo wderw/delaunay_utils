@@ -152,7 +152,6 @@
     <ClCompile Include="delaunay_utils.cpp" />
     <ClCompile Include="Edge.cpp" />
     <ClCompile Include="IRenderable.cpp" />
-    <ClCompile Include="main.cpp" />
     <ClCompile Include="Triangle.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="Vector.cpp" />

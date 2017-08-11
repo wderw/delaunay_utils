@@ -8,6 +8,8 @@
 class Utils
 {
 public:
+	static int recursiveDepth;
+
 	// 1. misc
 	static void Msgbox(std::string wiadomosc)
 	{

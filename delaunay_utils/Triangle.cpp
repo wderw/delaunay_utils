@@ -9,6 +9,10 @@ Triangle::Triangle()
 	e0 = nullptr;
 	e1 = nullptr;
 	e2 = nullptr;
+
+	IRenderable::mutex.lock();
+	IRenderable::renderables.push_back(this);
+	IRenderable::mutex.unlock();
 }
 
 Triangle::Triangle(Edge *e0, Edge *e1, Edge *e2) : Triangle()

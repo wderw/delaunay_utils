@@ -64,9 +64,9 @@ int main()
 
 	std::cout << get_cores_number() << std::endl;
 
-	point_t* points = new point_t[10000];
+	point_t* points = new point_t[1000];
 
-	for (int i = 0; i < 10000; ++i)
+	for (int i = 0; i < 1000; ++i) 
 	{
 		double quakex = static_cast <double> (rand()) / static_cast <double> (RAND_MAX);
 		double quakey = static_cast <double> (rand()) / static_cast <double> (RAND_MAX);
@@ -76,7 +76,7 @@ int main()
 		points[i].z = quakez + rand() % 1000;
 	}	
 
-	int result = delaunay_dc(points, 10000);
+	int result = delaunay_dc(points, 1000);
 	std::cout << result << std::endl;
 
 	system("pause");

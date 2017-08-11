@@ -1,9 +1,15 @@
-﻿#include "common.h"
+﻿#include <string>
+#include <iostream>
+#include <fstream>
+
+#include "common.h"
 
 #include "Utils.h"
 #include "Vertex.h"
 #include "Edge.h"
 #include "Triangle.h"
+
+int Utils::recursiveDepth = log2(std::thread::hardware_concurrency());
 
 inline bool Utils::VertexComparatorX(Vertex * A, Vertex * B)
 {
@@ -212,13 +218,9 @@ inline Triangle* Utils::MakeSimplex(Edge * f, std::vector<Vertex*>& pointset, do
 
 
 		}
-
-
-
 		Edge *e1, *e2;
 		e1 = new Edge(f->v1, best);
 		e2 = new Edge(f->v2, best);
-
 
 
 		Vector origin(Utils::CenterOfMass(f->v1, f->v2, best));
@@ -392,7 +394,7 @@ void Utils::dt_dewall(std::vector<Vertex*>& pointset, std::list<Edge*>& AFL, int
 		}
 	}
 		
-	if (recurrentCounter < 2)
+	if (recurrentCounter < Utils::recursiveDepth)
 	{
 		recurrentCounter += 1;
 

@@ -1,4 +1,4 @@
 #include "IRenderable.h"
 
-std::vector<IRenderable*> IRenderable::renderables;
+std::vector<Triangle*> IRenderable::renderables;
 std::mutex IRenderable::mutex;
