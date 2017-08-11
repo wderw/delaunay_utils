@@ -13,7 +13,16 @@ int DELAUNAYLIBRARY_API delaunay_dc(point_t* input, int input_size)
 	}
 
 	std::vector<triangle_t*> result;
-	Utils::dt_dewall(pointset, AFL, 0, result);
+
+	clock_t begin = clock();
+
+	Utils::dt_dewall(pointset, AFL, 0);
+
+	clock_t end = clock();
+	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+	std::cout << "elapsed time: " << elapsed_secs << std::endl;
+
+	printf("renderables: %d \n", IRenderable::renderables.size());
 
 	return result.size();
 }

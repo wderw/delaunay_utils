@@ -2,7 +2,7 @@
 #include <cstdlib>
 
 #include <Windows.h>
-
+#include <ctime>
 
 #define DELAUNAYLIBRARY_API __declspec(dllimport) __stdcall
 
@@ -64,9 +64,9 @@ int main()
 
 	std::cout << get_cores_number() << std::endl;
 
-	point_t* points = new point_t[100];
+	point_t* points = new point_t[10000];
 
-	for (int i = 0; i < 100; ++i)
+	for (int i = 0; i < 10000; ++i)
 	{
 		double quakex = static_cast <double> (rand()) / static_cast <double> (RAND_MAX);
 		double quakey = static_cast <double> (rand()) / static_cast <double> (RAND_MAX);
@@ -74,10 +74,9 @@ int main()
 		points[i].x = quakex + rand() % 1000;
 		points[i].y = quakey + rand() % 1000;
 		points[i].z = quakez + rand() % 1000;
-	}
+	}	
 
-	int result = delaunay_dc(points, 100);
-
+	int result = delaunay_dc(points, 10000);
 	std::cout << result << std::endl;
 
 	system("pause");

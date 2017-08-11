@@ -1,6 +1,7 @@
 #pragma once
 
 #include "common.h"
+#include "IRenderable.h"
 #include "Vector.h"
 
 class Vertex

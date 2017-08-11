@@ -1,4 +1,3 @@
-/*
 #include <SFML/Graphics.hpp>
 #include <Windows.h>
 #include <cstdlib>
@@ -11,13 +10,18 @@
 
 int main()
 {
+	int cores = std::thread::hardware_concurrency();
+	int depth1 = log2(cores);
+	printf("depth1: %d", depth1);
+
+
 	time_t randomSeed = time(NULL);
 	srand(randomSeed);
 
 	printf("seed: %d\n", randomSeed);
 	//srand(1531);
 	//srand(1501925017);
-
+	//srand(1502364490);
 	// zaladuj fonty
 	sf::Font font;
 	if (!font.loadFromFile("cour.ttf"))
@@ -34,7 +38,7 @@ int main()
 
 	sf::Vector2u windowSize = window.getSize();
 
-	// shapes text 
+	/* shapes text */
 	sf::Text mousePosText;
 	mousePosText.setFont(font);
 	mousePosText.setString("Mouse world position.");
@@ -43,7 +47,7 @@ int main()
 	mousePosText.setStyle(sf::Text::Bold | sf::Text::Regular);
 	mousePosText.setPosition(static_cast<double>(mousePosText.getCharacterSize()), static_cast<double>(windowSize.y) - mousePosText.getCharacterSize() * 2);
 
-	// automatyczne generowanie punktow
+	/* automatyczne generowanie punktow */
 	for (int i = 0; i < VERTEX_COUNT; ++i)
 	{
 		double quake = static_cast <double> (rand()) / static_cast <double> (RAND_MAX);
@@ -54,7 +58,9 @@ int main()
 	sf::Clock clock;
 	clock.restart();
 
-	Utils::dt_dewall(Vertex::vertices,(double) 400);
+	int recurrentCounter = 0;
+	std::list<Edge*> AFL;
+	Utils::dt_dewall(Vertex::vertices, AFL, recurrentCounter);
 
 	sf::Time time = clock.restart();
 	double timeMilliseconds = time.asMilliseconds();
@@ -163,4 +169,3 @@ int main()
 	}
 	return 0;
 }
-*/

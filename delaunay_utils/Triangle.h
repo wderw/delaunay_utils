@@ -1,9 +1,10 @@
 #pragma once
 
 #include "common.h"
+#include "IRenderable.h"
 #include "Edge.h"
 
-class Triangle
+class Triangle : public IRenderable
 {
 public:
 	Edge* e0;

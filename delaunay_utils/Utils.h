@@ -1,21 +1,19 @@
 #pragma once
 
-#include <mutex>
-
 #include "common.h"
+#include "IRenderable.h"
 #include "Vector.h"
 
 // rozne narzedzia pomocnicze
 class Utils
 {
 public:
-	static std::mutex mutex;
-
 	// 1. misc
 	static void Msgbox(std::string wiadomosc)
 	{
 		MessageBoxA(NULL, wiadomosc.c_str(), "Info", MB_ICONINFORMATION | MB_OK);
 	}
+
 
 	static bool VertexComparatorX(Vertex* A, Vertex* B);
 	static void SortByX(std::vector<Vertex*>& pointset);
@@ -30,6 +28,7 @@ public:
 	// srodek ciezkosci trojkata
 	static Vector CenterOfMass(Vertex* a, Vertex* b, Vertex* c);
 
+
 	static bool ContainsEdge(std::vector<Edge*>& edges, Edge* f);
 	static bool SameEdge(Edge* A, Edge* B);
 
@@ -38,10 +37,10 @@ public:
 	static void EvaluateTriangle(int i, int j, int k, std::vector<Vertex*>& pointset);
 	static Vector* CircumCenter(Vector& a, Vector& b, Vector& c);
 	static std::vector<Edge*> dt_bruteforce(std::vector<Vertex*> &pointset);
-	static void dt_dewall(std::vector<Vertex*>& pointset, std::list<Edge*>& AFL, int, std::vector<triangle_t*>& result);
+	static void dt_dewall(std::vector<Vertex*>& pointset, std::list<Edge*>& AFL, int);
 	static double DelaunayDistance(Edge* f, Vertex* p);
 	static std::vector<Edge*> ConvexHull(std::vector<Vertex*> &pointset);
-	static Triangle* MakeSimplex(Edge * f, std::vector<Vertex*>& pointset, double alfa, bool(*IsIntersected)(Vertex*, Vertex*, double), std::vector<triangle_t*>& result);
+	static Triangle* MakeSimplex(Edge* f, std::vector<Vertex*>& pointset,double alfa, bool (*IsIntersected)(Vertex*, Vertex*, double) );
 	static void UpdateAFL(std::list<Edge*>& AFL, Edge*);
 
 	static int WhichSideOfAlpha(Edge* f, double alfa);
