@@ -1,10 +1,9 @@
 #pragma once
 
 #include "common.h"
-#include "IRenderable.h"
 #include "Edge.h"
 
-class Triangle : public IRenderable
+class Triangle
 {
 public:
 	Edge* e0;
@@ -13,6 +12,4 @@ public:
 
 	Triangle();
 	Triangle(Edge*, Edge*, Edge*);
-
-	virtual void render(sf::RenderWindow *window);
 };

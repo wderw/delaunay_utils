@@ -1,5 +1,3 @@
-﻿  delaunay_utils.cpp
-c:\users\paran\documents\visual studio 2017\projects\delaunay_utils\delaunay_utils\delaunay_utils.h(12): warning C4068: unknown pragma
-     Creating library C:\Users\paran\documents\visual studio 2017\Projects\delaunay_utils\x64\Debug\delaunay_utils.lib and object C:\Users\paran\documents\visual studio 2017\Projects\delaunay_utils\x64\Debug\delaunay_utils.exp
+﻿  Utils.cpp
   delaunay_utils.vcxproj -> C:\Users\paran\documents\visual studio 2017\Projects\delaunay_utils\x64\Debug\delaunay_utils.dll
   delaunay_utils.vcxproj -> C:\Users\paran\documents\visual studio 2017\Projects\delaunay_utils\x64\Debug\delaunay_utils.pdb (Partial PDB)

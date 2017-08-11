@@ -2,7 +2,7 @@
 
 #include "common.h"
 
-class Edge// : public IRenderable
+class Edge
 {
 public:
 	Vertex *v1, *v2;
@@ -13,5 +13,4 @@ public:
 	Edge(Vertex *v1, Vertex *v2);
 
 	void setOrigin(Vector);
-	//virtual void render(sf::RenderWindow *window);
 };

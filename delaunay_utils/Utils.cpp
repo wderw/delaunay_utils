@@ -1,13 +1,11 @@
 ﻿#include "common.h"
 
 #include "Utils.h"
-#include "Circle.h"
 #include "Vertex.h"
 #include "Edge.h"
 #include "Triangle.h"
-#include "Line.h"
 
-int Circle::redColorProgression = 0;
+std::mutex Utils::mutex;
 
 inline bool Utils::VertexComparatorX(Vertex * A, Vertex * B)
 {
@@ -21,9 +19,26 @@ inline bool Utils::VertexComparatorX(Vertex * A, Vertex * B)
 	}
 }
 
+inline bool Utils::VertexComparatorY(Vertex * A, Vertex * B)
+{
+	if (A->position.y < B->position.y)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
 inline void Utils::SortByX(std::vector<Vertex*>& pointset)
 {
 	std::sort(pointset.begin(), pointset.end(), VertexComparatorX);
+}
+
+inline void Utils::SortByY(std::vector<Vertex*>& pointset)
+{
+	std::sort(pointset.begin(), pointset.end(), VertexComparatorY);
 }
 // funkcja sprawdza czy punkty p oraz cp leza po tej samej stronie linii
 // wyznaczanej przez wektor f
@@ -158,7 +173,7 @@ std::vector<Edge*> Utils::ConvexHull(std::vector<Vertex*> &pointset)
 	return result;
 }
 
-Triangle* Utils::MakeSimplex(Edge * f, std::vector<Vertex*>& pointset, double alfa)
+Triangle* Utils::MakeSimplex(Edge * f, std::vector<Vertex*>& pointset, double alfa, bool(*IsIntersected)(Vertex*, Vertex*, double), std::vector<triangle_t*>& result)
 {
 	double minDD = DBL_MAX;
 	Vertex* best = nullptr;
@@ -189,17 +204,15 @@ Triangle* Utils::MakeSimplex(Edge * f, std::vector<Vertex*>& pointset, double al
 
 	if (best != nullptr)
 	{
-		/* buduj tylko sciane
-		if (!isIntersected(f->v1, best, alfa) && !isIntersected(f->v2,best, alfa))
+		// buduj tylko sciane
+		if (!IsIntersected(f->v1, best, alfa) && !IsIntersected(f->v2,best, alfa))
 		{
 			return nullptr;
-		}
-		*/
-		
+		}	
 
 		Edge *e1, *e2;
 		e1 = new Edge(f->v1, best);
-		e2 = new Edge(f->v2, best);
+		e2 = new Edge(f->v2, best);		
 						
 		Vector origin(Utils::CenterOfMass(f->v1, f->v2, best));
 		e1->setOrigin(origin);
@@ -207,6 +220,17 @@ Triangle* Utils::MakeSimplex(Edge * f, std::vector<Vertex*>& pointset, double al
 		
 		Triangle* t = new Triangle(e1, e2, f);
 
+		triangleptr tri = new triangle_t(
+			t->e0->v1->position.x, t->e0->v1->position.y,
+			t->e1->v1->position.x, t->e1->v1->position.y,
+			t->e2->v1->position.x, t->e2->v1->position.y
+		);
+
+		mutex.lock();
+		result.push_back(tri);
+		mutex.unlock();
+
+		
 		return t;
 	}
 	else
@@ -252,27 +276,209 @@ inline void Utils::UpdateAFL(std::list<Edge*>& AFL, Edge* e)
 	*/
 }
 
-void Utils::dt_dewall(std::vector<Vertex*>& pointset, double alfa)
+inline void Utils::UpdateAFLBySide(std::list<Edge*>& AFL, std::list<Edge*>& AFL1, std::list<Edge*>& AFL2, Edge* f, double alfa, int (*WhichSideOfAlpha)(Edge*, double) )
 {
-	if (pointset.size() < 3)
+
+	int side = WhichSideOfAlpha(f, alfa);
+	if (side == 1)
 	{
-		return;
+		Utils::UpdateAFL(AFL1, f);
+		//f->color = sf::Color::Red;
 	}
+	else if (side == -1)
+	{
+		Utils::UpdateAFL(AFL2, f);
+		//f->color = sf::Color::Blue;
+	}
+	else
+	{
+		Utils::UpdateAFL(AFL, f);
+		//f->color = sf::Color::White;
+	}
+}
 
-	Utils::SortByX(pointset);
+inline void Utils::PointsetPartitionX(std::vector<Vertex*>& pointset, double alfa, std::vector<Vertex*>& P1, std::vector<Vertex*>& P2)
+{
+	for each (Vertex* point in pointset)
+	{
+		if (point->position.x < alfa)
+		{
+			P1.push_back(point);
+		}
+		else if (point->position.x > alfa)
+		{
+			P2.push_back(point);
+		}
+	}
+}
 
+inline void Utils::PointsetPartitionY(std::vector<Vertex*>& pointset, double alfa, std::vector<Vertex*>& P1, std::vector<Vertex*>& P2)
+{
+	for each (Vertex* point in pointset)
+	{
+		if (point->position.y < alfa)
+		{
+			P1.push_back(point);
+		}
+		else if (point->position.y > alfa)
+		{
+			P2.push_back(point);
+		}
+	}
+}
+
+void Utils::dt_dewall(std::vector<Vertex*>& pointset, std::list<Edge*>& AFL, int recurrentCounter, std::vector<triangle_t*>& result)
+{
+	//double alfa = (double)700;
+	double alfa;
+	std::list<Edge*> AFLa;
+	std::list<Edge*> AFL1;
+	std::list<Edge*> AFL2;
+	Triangle* t;
+
+	std::vector<Vertex*> P1;
+	std::vector<Vertex*> P2;
+
+	int(*SideEval) (Edge*, double);
+
+	bool(*IsIntersected)(Vertex*, Vertex*, double);
+
+	//void(*PointsetPartition) (std::vector<Vertex*>&, double, std::vector<Vertex*>&, std::vector<Vertex*>&);
+	
+	//Vertex* asd = pointset.front();
+	if (recurrentCounter % 2 == 0)
+	{
+		/* std::sort*/
+		//Utils::SortByX(pointset);
+		//alfa = pointset.front()->position.x + (pointset.back()->position.x - pointset.front()->position.x) / 2;
+		
+
+		/* quickselect x */
+		std::nth_element(pointset.begin(), pointset.begin() + pointset.size() / 2, pointset.end(),Utils::VertexComparatorX);
+		//alfa = pointset[pointset.size() / 2]->position.x + FIRST_SIMPLEX_OFFSET_EPSILON;
+		alfa = pointset.front()->position.x + (pointset.back()->position.x - pointset.front()->position.x) / 2;
+
+		Vector pos1(alfa, 0);
+		Vector pos2(alfa, 900);
+		//Line* cuttingLine = new Line(sf::Vertex(Utils::ToVector2f(pos1), sf::Color::Cyan), sf::Vertex(Utils::ToVector2f(pos2), sf::Color::Cyan));
+
+		Utils::PointsetPartitionX(pointset, alfa, P1, P2);
+
+		SideEval = Utils::WhichSideOfAlpha;
+		IsIntersected = Utils::IsIntersected;
+	}
+	else
+	{
+		/* std::sort*/
+		//Utils::SortByY(pointset);
+		//alfa = pointset.front()->position.y + (pointset.back()->position.y - pointset.front()->position.y) / 2;
+		
+
+		/* quickselect y */
+		std::nth_element(pointset.begin(), pointset.begin() + pointset.size() / 2, pointset.end(), Utils::VertexComparatorY);
+		//alfa = pointset[pointset.size() / 2]->position.y + FIRST_SIMPLEX_OFFSET_EPSILON;
+		alfa = pointset.front()->position.y + (pointset.back()->position.y - pointset.front()->position.y) / 2;
+
+		Vector pos1(0, alfa);
+		Vector pos2(1440, alfa);
+		//Line* cuttingLine = new Line(sf::Vertex(Utils::ToVector2f(pos1), sf::Color::Cyan), sf::Vertex(Utils::ToVector2f(pos2), sf::Color::Cyan));
+	
+		Utils::PointsetPartitionY(pointset, alfa, P1, P2);
+
+		SideEval = Utils::WhichSideOfAlphaY;
+		IsIntersected = Utils::IsIntersectedY;
+	}
+	
+	
 	//double alfa = pointset[(pointset.size() / 2)]->position.x + FIRST_SIMPLEX_OFFSET_EPSILON;
-
+	/*
 	Vector pos1(alfa, 0);
 	Vector pos2(alfa, 900);
 	Line* cuttingLine = new Line(sf::Vertex(Utils::ToVector2f(pos1), sf::Color::Cyan), sf::Vertex(Utils::ToVector2f(pos2), sf::Color::Cyan));
+	*/
+	if (AFL.empty())
+	{
+		//MakeFirstSimplex
+
+		t = Utils::MakeFirstSimplex(pointset, alfa);
+
+		triangleptr tri = new triangle_t(
+			t->e0->v1->position.x, t->e0->v1->position.y,
+			t->e1->v1->position.x, t->e1->v1->position.y,
+			t->e2->v1->position.x, t->e2->v1->position.y
+		);
+
+		mutex.lock();
+		result.push_back(tri);
+		mutex.unlock();
+
+		UpdateAFL(AFL, t->e0);
+		UpdateAFL(AFL, t->e1);
+		UpdateAFL(AFL, t->e2);
+
+		//UpdateAFLBySide(AFLa, AFL1, AFL2, t->e0, alfa);
+		//UpdateAFLBySide(AFLa, AFL1, AFL2, t->e1, alfa);
+		//UpdateAFLBySide(AFLa, AFL1, AFL2, t->e2, alfa);
+	}
+
+	
+
+	for each (Edge* e in AFL) 
+	{
+		UpdateAFLBySide(AFLa, AFL1, AFL2, e, alfa, SideEval);
+	}
+	
 
 	//std::vector<Edge*> hull = Utils::convexHull(pointset);
 
+	
+
+	/* generic simplex: */
+	
+	
+
+	// oznacz pierwszy trojkat na czerwono
+	//t0->e0->setColor(sf::Color::Red);
+	//t0->e1->setColor(sf::Color::Red);
+	//t0->e2->setColor(sf::Color::Red);
+
+	
+
+	// ogranicznik ilosci iteracji
+	//int counter = 0;
+	
+	while (!(AFLa.empty())) // && counter < ITER_COUNT)
+	{
+		Edge* e = AFLa.back();
+		AFLa.pop_back();
+
+		Triangle* t = MakeSimplex(e, pointset,alfa,IsIntersected,result);
+
+		if (t != nullptr)
+		{			
+
+			UpdateAFLBySide(AFLa, AFL1, AFL2, t->e0, alfa, SideEval);
+			UpdateAFLBySide(AFLa, AFL1, AFL2, t->e1, alfa, SideEval);
+			
+					
+		}
+		//counter++;
+	}
+
+	//if (recurrentCounter >= 7) return;
+	recurrentCounter += 1;
+
+	if (!AFL1.empty()) Utils::dt_dewall(P1, AFL1, recurrentCounter, result);
+	if (!AFL2.empty()) Utils::dt_dewall(P2, AFL2, recurrentCounter, result);
+}
+
+
+
+inline Triangle* Utils::MakeFirstSimplex(std::vector<Vertex*>& pointset, double alfa)
+{
 	double minDist1 = DBL_MAX;
 	double currentDistance;
 	Vertex* currentVertex = nullptr, *p1 = nullptr;
-
 	// MakeFirstSimplex:
 	for (register int i = 0; i < pointset.size(); ++i)
 	{
@@ -295,6 +501,7 @@ void Utils::dt_dewall(std::vector<Vertex*>& pointset, double alfa)
 	{
 		rightSide = false;
 	}
+
 
 	// znajdz p2 po drugiej stronie
 	minDist1 = DBL_MAX;
@@ -349,7 +556,6 @@ void Utils::dt_dewall(std::vector<Vertex*>& pointset, double alfa)
 		}
 	}
 
-	/* generic simplex: */
 	Edge* f = new Edge(p1, p2);
 	Edge* f2 = new Edge(p2, p3);
 	Edge* f3 = new Edge(p3, p1);
@@ -360,39 +566,11 @@ void Utils::dt_dewall(std::vector<Vertex*>& pointset, double alfa)
 	f2->setOrigin(centerOfMass);
 	f3->setOrigin(centerOfMass);
 
-	std::list<Edge*> AFL;
+	
 
 
-	Triangle* t0 = new Triangle(f, f2, f3);
-
-	// oznacz pierwszy trojkat na czerwono
-	//t0->e0->setColor(sf::Color::Red);
-	//t0->e1->setColor(sf::Color::Red);
-	//t0->e2->setColor(sf::Color::Red);
-
-	UpdateAFL(AFL, f);
-	UpdateAFL(AFL, f2);
-	UpdateAFL(AFL, f3);
-
-	// ogranicznik ilosci iteracji
-	//int counter = 0;
-	while (!(AFL.empty())) // && counter < ITER_COUNT)
-	{
-		Edge* e = AFL.back();
-		AFL.pop_back();
-
-		Triangle* t = MakeSimplex(e, pointset,alfa);
-
-		if (t != nullptr)
-		{			
-			UpdateAFL(AFL, t->e0);
-			UpdateAFL(AFL, t->e1);		
-		}
-		//counter++;
-	}
-	printf("renderables: %d \n", IRenderable::renderables.size());
+	return new Triangle(f, f2, f3);
 }
-
 // funkcja delaunay distance (dd) zdefiniowana w publikacji algorytmu DeWall
 inline double Utils::DelaunayDistance(Edge * f, Vertex * p)
 {
@@ -412,25 +590,6 @@ inline double Utils::DelaunayDistance(Edge * f, Vertex * p)
 		}
 	}
 	else return DBL_MAX;
-}
-
-std::string Utils::VectorDescription(Vector * vec, char * description)
-{
-	std::string result = std::string(description) +
-		std::string(": [x:") + std::to_string(vec->x) +
-		std::string(" y:") + std::to_string(vec->y) +
-		std::string("]");
-
-	return result;
-}
-std::string Utils::VectorDescription(sf::Vector2f * vec, char * description)
-{
-	std::string result = std::string(description) +
-		std::string(": [x:") + std::to_string(vec->x) +
-		std::string(" y:") + std::to_string(vec->y) +
-		std::string("]");
-
-	return result;
 }
 
 inline bool Utils::ContainsEdge(std::vector<Edge*>& edges, Edge* f)
@@ -472,6 +631,57 @@ inline bool Utils::IsIntersected(Vertex* v1, Vertex* v2, double alfa)
 	else
 	{
 		return false;
+	}
+}
+inline bool Utils::IsIntersectedY(Vertex* v1, Vertex* v2, double alfa)
+{
+	if (v1->position.y < alfa && v2->position.y >= alfa)
+	{
+		return true;
+	}
+	else if (v2->position.y < alfa && v1->position.y >= alfa)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+inline int Utils::WhichSideOfAlpha(Edge* f, double alfa)
+{
+	Vertex* v1 = f->v1;
+	Vertex* v2 = f->v2;
+	if (v1->position.x < alfa && v2->position.x < alfa)
+	{
+		return 1;
+	}
+	else if (v2->position.x > alfa && v1->position.x > alfa)
+	{
+		return -1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+inline int Utils::WhichSideOfAlphaY(Edge* f, double alfa)
+{
+	Vertex* v1 = f->v1;
+	Vertex* v2 = f->v2;
+	if (v1->position.y < alfa && v2->position.y < alfa)
+	{
+		return 1;
+	}
+	else if (v2->position.y > alfa && v1->position.y > alfa)
+	{
+		return -1;
+	}
+	else
+	{
+		return 0;
 	}
 }
 

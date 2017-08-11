@@ -1,3 +1,4 @@
+/*
 #include <SFML/Graphics.hpp>
 #include <Windows.h>
 #include <cstdlib>
@@ -33,7 +34,7 @@ int main()
 
 	sf::Vector2u windowSize = window.getSize();
 
-	/* shapes text */
+	// shapes text 
 	sf::Text mousePosText;
 	mousePosText.setFont(font);
 	mousePosText.setString("Mouse world position.");
@@ -42,7 +43,7 @@ int main()
 	mousePosText.setStyle(sf::Text::Bold | sf::Text::Regular);
 	mousePosText.setPosition(static_cast<double>(mousePosText.getCharacterSize()), static_cast<double>(windowSize.y) - mousePosText.getCharacterSize() * 2);
 
-	/* automatyczne generowanie punktow */
+	// automatyczne generowanie punktow
 	for (int i = 0; i < VERTEX_COUNT; ++i)
 	{
 		double quake = static_cast <double> (rand()) / static_cast <double> (RAND_MAX);
@@ -162,3 +163,4 @@ int main()
 	}
 	return 0;
 }
+*/

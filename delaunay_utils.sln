@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "delaunay_utils", "delaunay_utils\delaunay_utils.vcxproj", "{45FB43F5-D00D-4EA8-BB21-84CE89656CA0}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "delaunay_utils_client", "delaunay_utils_client\delaunay_utils_client.vcxproj", "{24468A5E-2E27-4F01-82E2-8F0819141E94}"
+	ProjectSection(ProjectDependencies) = postProject
+		{45FB43F5-D00D-4EA8-BB21-84CE89656CA0} = {45FB43F5-D00D-4EA8-BB21-84CE89656CA0}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

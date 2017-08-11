@@ -28,13 +28,3 @@ void Vertex::moveBy(double x, double y)
 	this->position.x += x;
 	this->position.y += y;
 }
-/*
-void Vertex::render(sf::RenderWindow *window)
-{
-	this->shape.setOutlineColor(outlineColor);
-	this->shape.setFillColor(fillColor);
-	sf::Vector2<double> offset(shape.getRadius(), shape.getRadius());
-	this->shape.setPosition(position - offset);
-	window->draw(shape);
-}
-*/

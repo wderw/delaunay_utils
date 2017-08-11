@@ -1,10 +1,9 @@
 #pragma once
 
 #include "common.h"
-#include "IRenderable.h"
 #include "Vector.h"
 
-class Vertex// : public IRenderable
+class Vertex
 {
 public:
 	static std::vector<Vertex*> vertices;
@@ -17,6 +16,4 @@ public:
 	void moveTo(double, double);
 	void moveTo(Vector);
 	void moveBy(double, double);
-
-	//virtual void render(sf::RenderWindow *window);
 };

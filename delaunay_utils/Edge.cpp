@@ -17,15 +17,3 @@ void Edge::setOrigin(Vector origin)
 {
 	simplex_origin = origin;
 }
-/*
-void Edge::render(sf::RenderWindow * window)
-{	
-	sf::Vertex line[] =
-	{
-	sf::Vertex(sf::Vector2f(v1->position),color1),
-	sf::Vertex(sf::Vector2f(v2->position),color2)
-	};	
-
-	window->draw(line, 2, sf::Lines);
-}
-*/
