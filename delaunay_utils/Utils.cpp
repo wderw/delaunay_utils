@@ -112,9 +112,6 @@ std::vector<Edge*> Utils::ConvexHull(std::vector<Vertex*> &pointset)
 			min = current;
 		}
 	}
-	// highlight it
-	//min->fillColor = sf::Color::Yellow;
-
 
 	current = min;
 	Vertex* candidate = nullptr;
@@ -140,7 +137,6 @@ std::vector<Edge*> Utils::ConvexHull(std::vector<Vertex*> &pointset)
 			previousVector = v;
 		}
 	}
-	//best->fillColor = sf::Color::Cyan;	
 	Edge* e = new Edge(current, best);
 	result.push_back(e);
 	current = best;
@@ -151,8 +147,6 @@ std::vector<Edge*> Utils::ConvexHull(std::vector<Vertex*> &pointset)
 	// wrap
 	while (best != min)
 	{
-		//best->fillColor = sf::Color::Cyan;
-
 		for (int i = 0; i < pointset.size(); ++i)
 		{
 			candidate = pointset[i];
@@ -256,38 +250,22 @@ inline void Utils::UpdateAFL(std::list<Edge*>& AFL, Edge* e)
 	{
 		AFL.remove(*it);
 	}
-
-	/* old crap
-	for (auto const& i : AFL)
-	{
-		if (sameEdge(i, e))
-		{
-			AFL.remove(i);
-			return;
-		}
-	}
-	AFL.push_back(e);
-	*/
 }
 
 inline void Utils::UpdateAFLBySide(std::list<Edge*>& AFL, std::list<Edge*>& AFL1, std::list<Edge*>& AFL2, Edge* f, double alfa, int (*WhichSideOfAlpha)(Edge*, double) )
 {
-
 	int side = WhichSideOfAlpha(f, alfa);
 	if (side == 1)
 	{
 		Utils::UpdateAFL(AFL1, f);
-		//f->color = sf::Color::Red;
 	}
 	else if (side == -1)
 	{
 		Utils::UpdateAFL(AFL2, f);
-		//f->color = sf::Color::Blue;
 	}
 	else
 	{
 		Utils::UpdateAFL(AFL, f);
-		//f->color = sf::Color::White;
 	}
 }
 
@@ -410,8 +388,6 @@ void Utils::dt_dewall(std::vector<Vertex*>& pointset, std::list<Edge*>& AFL, int
 		if (!AFL2.empty()) Utils::dt_dewall(P2, AFL2, recurrentCounter);
 	}	
 }
-
-
 
 inline Triangle* Utils::MakeFirstSimplex(std::vector<Vertex*>& pointset, double alfa)
 {

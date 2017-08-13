@@ -11,12 +11,7 @@
 
 extern "C"
 {
-	int DELAUNAYLIBRARY_API get_cores_number(void)
-	{
-		return std::thread::hardware_concurrency();
-	}
-
-	int DELAUNAYLIBRARY_API delaunay_dc(point_t* input, int input_size);
+	triangleptr DELAUNAYLIBRARY_API delaunay_dc(point_t* input, int input_size, int &output_size,double& volume);
 }
 
 

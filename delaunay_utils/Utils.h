@@ -16,6 +16,12 @@ public:
 		MessageBoxA(NULL, wiadomosc.c_str(), "Info", MB_ICONINFORMATION | MB_OK);
 	}
 
+	static void swapValues(double& a, double& b)
+	{
+		double temp = b;
+		b = a;
+		a = temp;
+	}
 
 	static bool VertexComparatorX(Vertex* A, Vertex* B);
 	static void SortByX(std::vector<Vertex*>& pointset);

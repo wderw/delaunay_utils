@@ -7,10 +7,11 @@ Vertex::Vertex()
 {
 	Vertex::vertices.push_back(this);
 }
-Vertex::Vertex(double x, double y) : Vertex()
+Vertex::Vertex(double x, double y, double _z) : Vertex()
 {
 	position.x = x;
 	position.y = y;
+	z = _z;
 }
 
 inline void Vertex::moveTo(double x, double y)

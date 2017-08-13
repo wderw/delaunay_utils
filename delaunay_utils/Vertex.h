@@ -10,9 +10,10 @@ public:
 	static std::vector<Vertex*> vertices;
 
 	Vector position;
+	double z;
 
 	Vertex();
-	Vertex(double, double);
+	Vertex(double, double, double);
 
 	void moveTo(double, double);
 	void moveTo(Vector);

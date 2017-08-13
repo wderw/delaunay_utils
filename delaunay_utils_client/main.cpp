@@ -3,6 +3,8 @@
 
 #include <Windows.h>
 #include <ctime>
+#include <iostream>
+#include <fstream>
 
 #define DELAUNAYLIBRARY_API __declspec(dllimport) __stdcall
 
@@ -13,30 +15,15 @@ struct point_t
 
 struct triangle_t
 {
-	double x1, y1;
-	double x2, y2;
-	double x3, y3;
-
-	triangle_t() {}
-	triangle_t(double x1, double y1, double x2, double y2, double x3, double y3)
-	{
-		this->x1 = x1;
-		this->y1 = y1;
-
-		this->x2 = x2;
-		this->y2 = y2;
-
-		this->x3 = x3;
-		this->y3 = y3;
-	}
+	double x1, y1, z1;
+	double x2, y2, z2;
+	double x3, y3, z3;
 };
 
 typedef triangle_t* triangleptr;
 
-
 // delegaty do funkcji
-typedef int(*pIntVoid)(void);
-typedef int(*pIntPointptrInt)(point_t*, int);
+typedef triangle_t*(*pDelaunayDC)(point_t*, int, int&,double&);
 
 int main()
 {
@@ -48,36 +35,54 @@ int main()
 		return EXIT_FAILURE;
 	}
 
-	auto get_cores_number = (pIntVoid)GetProcAddress(hGetProcIDDLL, "get_cores_number");
-	if (!get_cores_number)
-	{
-		std::cout << "could not locate the function" << std::endl;
-		return EXIT_FAILURE;
-	}
-
-	auto delaunay_dc = (pIntPointptrInt)GetProcAddress(hGetProcIDDLL, "delaunay_dc");
+	auto delaunay_dc = (pDelaunayDC)GetProcAddress(hGetProcIDDLL, "delaunay_dc");
 	if (!delaunay_dc)
 	{
 		std::cout << "could not locate the function" << std::endl;
 		return EXIT_FAILURE;
 	}
 
-	std::cout << get_cores_number() << std::endl;
+	point_t* points = new point_t[10000];
 
-	point_t* points = new point_t[1000];
-
-	for (int i = 0; i < 1000; ++i) 
+	for (int i = 0; i < 10000; ++i) 
 	{
 		double quakex = static_cast <double> (rand()) / static_cast <double> (RAND_MAX);
 		double quakey = static_cast <double> (rand()) / static_cast <double> (RAND_MAX);
 		double quakez = static_cast <double> (rand()) / static_cast <double> (RAND_MAX);
 		points[i].x = quakex + rand() % 1000;
 		points[i].y = quakey + rand() % 1000;
-		points[i].z = quakez + rand() % 1000;
+		points[i].z = 1.0;// quakez + rand() % 1000;
 	}	
+	
+	clock_t begin = clock();
+	
+	int resultsize = -1;
+	double volume = 6.66;
+	triangle_t* result = delaunay_dc(points, 10000, resultsize, volume);
 
-	int result = delaunay_dc(points, 1000);
-	std::cout << result << std::endl;
+	std::cout << "resultsize: " << resultsize << std::endl;
+	std::cout << "volume: " << volume << std::endl;
+
+	clock_t end = clock();
+	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC * 1000;
+	std::cout << "elapsed time: " << elapsed_secs << std::endl;
+
+
+	std::ofstream myfile;
+	myfile.open("triangles.txt", std::ios::app);
+
+	for (int i = 0; i < resultsize; i++)
+	{
+		myfile << result[i].x1 << std::endl;
+		myfile << result[i].y1 << std::endl;
+
+		myfile << result[i].x2 << std::endl;
+		myfile << result[i].y2 << std::endl;
+
+		myfile << result[i].x3 << std::endl;
+		myfile << result[i].y3 << std::endl;
+	}
+	myfile.close();
 
 	system("pause");
 	return 0;
