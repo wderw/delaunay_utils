@@ -95,6 +95,7 @@ int main()
 
 	for (int i = 0; i < resultsize; i++)
 	{
+		myfile << std::fixed;
 		myfile << result[i].x1 << std::endl;
 		myfile << result[i].y1 << std::endl;
 		myfile << result[i].z1 << std::endl;
