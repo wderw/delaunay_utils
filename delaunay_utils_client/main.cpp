@@ -42,8 +42,9 @@ int main()
 		return EXIT_FAILURE;
 	}
 
-	point_t* points = new point_t[10000];
-
+	
+	point_t* points = new point_t[112];
+	/*
 	for (int i = 0; i < 10000; ++i) 
 	{
 		double quakex = static_cast <double> (rand()) / static_cast <double> (RAND_MAX);
@@ -52,13 +53,34 @@ int main()
 		points[i].x = quakex + rand() % 1000;
 		points[i].y = quakey + rand() % 1000;
 		points[i].z = 1.0;// quakez + rand() % 1000;
-	}	
+	}
+	*/
+	srand(time(NULL));
+
+	std::ifstream file;
+	file.open("delaunay.xyz", std::ios::in);
+	for (int i = 0; i < 112; i++)
+	{
+		file >> points[i].x;
+		file >> points[i].y;
+		file >> points[i].z;
+	}
+		/*
+		double quakex = static_cast <double> (rand()) / static_cast <double> (RAND_MAX);
+		double quakey = static_cast <double> (rand()) / static_cast <double> (RAND_MAX);
+		double quakez = static_cast <double> (rand()) / static_cast <double> (RAND_MAX);
+
+		points[i].x += quakex;
+		points[i].y += quakey;
+		points[i].z += quakez;
+	}
+	*/
 	
 	clock_t begin = clock();
 	
 	int resultsize = -1;
 	double volume = 6.66;
-	triangle_t* result = delaunay_dc(points, 10000, resultsize, volume);
+	triangle_t* result = delaunay_dc(points, 112, resultsize, volume);
 
 	std::cout << "resultsize: " << resultsize << std::endl;
 	std::cout << "volume: " << volume << std::endl;
@@ -75,12 +97,15 @@ int main()
 	{
 		myfile << result[i].x1 << std::endl;
 		myfile << result[i].y1 << std::endl;
+		myfile << result[i].z1 << std::endl;
 
 		myfile << result[i].x2 << std::endl;
 		myfile << result[i].y2 << std::endl;
+		myfile << result[i].z2 << std::endl;
 
 		myfile << result[i].x3 << std::endl;
 		myfile << result[i].y3 << std::endl;
+		myfile << result[i].z3 << std::endl;
 	}
 	myfile.close();
 

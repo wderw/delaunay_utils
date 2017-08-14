@@ -368,7 +368,7 @@ void Utils::dt_dewall(std::vector<Vertex*>& pointset, std::list<Edge*>& AFL, int
 		}
 	}
 		
-	if (recurrentCounter < Utils::recursiveDepth)
+	if (recurrentCounter < 0)// Utils::recursiveDepth)
 	{
 		recurrentCounter += 1;
 

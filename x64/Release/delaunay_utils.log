@@ -1,5 +1,5 @@
-﻿  delaunay_utils.cpp
-delaunay_utils.cpp(26): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+﻿  Utils.cpp
+Utils.cpp(12): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
      Creating library C:\Users\paran\documents\visual studio 2017\Projects\delaunay_utils\x64\Release\delaunay_utils.lib and object C:\Users\paran\documents\visual studio 2017\Projects\delaunay_utils\x64\Release\delaunay_utils.exp
   Generating code
   15 of 537 functions ( 2.8%) were compiled, the rest were copied from previous compilation.
