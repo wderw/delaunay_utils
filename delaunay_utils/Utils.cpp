@@ -368,15 +368,15 @@ void Utils::dt_dewall(std::vector<Vertex*>& pointset, std::list<Edge*>& AFL, int
 		}
 	}
 		
-	if (recurrentCounter < 0)// Utils::recursiveDepth)
+	if (recurrentCounter < Utils::recursiveDepth)
 	{
 		recurrentCounter += 1;
 
 		std::vector<std::thread> threads;
 
 
-		threads.push_back(std::thread(Utils::dt_dewall, P1, AFL1, recurrentCounter));
-		threads.push_back(std::thread(Utils::dt_dewall, P2, AFL2, recurrentCounter));
+		if (!AFL1.empty()) threads.push_back(std::thread(Utils::dt_dewall, P1, AFL1, recurrentCounter));
+		if (!AFL2.empty()) threads.push_back(std::thread(Utils::dt_dewall, P2, AFL2, recurrentCounter));
 
 		for (auto& th : threads)
 			th.join();

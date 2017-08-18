@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <iostream>
 #include <fstream>
+#include <thread>
 
 #include "dll_import.h"
 
@@ -16,9 +17,9 @@
 
 int main()
 {
-	//int cores = std::thread::hardware_concurrency();
-	//int recurrenceDepth = log2(cores);
-	//printf("recurrenceDepth: %d", recurrenceDepth);
+	int cores = std::thread::hardware_concurrency();
+	int recurrenceDepth = log2(cores);
+	printf("recurrenceDepth: %d\n", recurrenceDepth);
 
 	time_t randomSeed = time(NULL);
 	srand(randomSeed);
@@ -80,7 +81,7 @@ int main()
 
 	/* wypisz wyniki do pliku: plik trzeba wczesniej usunac (TODO: tryb overwrite) */
 	std::ofstream myfile;
-	myfile.open("triangles.txt");
+	myfile.open("triangles.txt", std::ios::out);
 
 	for (int i = 0; i < resultsize; i++)
 	{
@@ -211,20 +212,29 @@ int main()
 		// rysowanie
 		window.clear(sf::Color(CUSTOM_BLACK));
 
-		sf::Vertex edges[3];
-
 		for (int i = 0; i < resultsize; i++)
 		{
-			edges[0].position.x = result[i].x1;
-			edges[0].position.y = result[i].y1;
+			sf::Vertex line0[] =
+			{
+				sf::Vertex(sf::Vector2f(result[i].x1, result[i].y1),sf::Color::White),
+				sf::Vertex(sf::Vector2f(result[i].x2, result[i].y2),sf::Color::White)
+			};
 
-			edges[1].position.x = result[i].x2;
-			edges[1].position.y = result[i].y2;
+			sf::Vertex line1[] =
+			{
+				sf::Vertex(sf::Vector2f(result[i].x1, result[i].y1),sf::Color::White),
+				sf::Vertex(sf::Vector2f(result[i].x3, result[i].y3),sf::Color::White)
+			};
 
-			edges[2].position.x = result[i].x3;
-			edges[2].position.y = result[i].y3;
+			sf::Vertex line2[] =
+			{
+				sf::Vertex(sf::Vector2f(result[i].x2, result[i].y2),sf::Color::White),
+				sf::Vertex(sf::Vector2f(result[i].x3, result[i].y3),sf::Color::White)
+			};
 
-			window.draw(edges, 3, sf::LineStrip);
+			window.draw(line0, 2, sf::Lines);
+			window.draw(line1, 2, sf::Lines);
+			window.draw(line2, 2, sf::Lines);
 		}
 
 		// wyswietl informacje o aktualnie podswiedlonych wierzcholkach

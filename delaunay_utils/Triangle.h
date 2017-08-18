@@ -12,5 +12,6 @@ public:
 	Edge* e2;
 
 	Triangle();
+	~Triangle();
 	Triangle(Edge*, Edge*, Edge*);
 };

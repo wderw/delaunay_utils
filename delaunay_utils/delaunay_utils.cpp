@@ -62,6 +62,20 @@ triangleptr DELAUNAYLIBRARY_API delaunay_dc(point_t* input, int input_size, int 
 	}
 	volume = totalVolume;
 
+	/* wyczysc pamiec NIE TAK :(
+	for (int i = 0; i < IRenderable::triangles.size(); i++)
+	{
+		delete IRenderable::triangles[i];
+	}
+	IRenderable::triangles.clear();
+
+	for (int i = 0; i < pointset.size(); i++)
+	{
+		delete pointset[i];
+	}
+	pointset.clear();
+	*/
+
 	return output;
 }
 
