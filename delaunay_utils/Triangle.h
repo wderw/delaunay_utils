@@ -3,6 +3,7 @@
 #include "common.h"
 #include "IRenderable.h"
 #include "Edge.h"
+#include <memory>
 
 class Triangle : public IRenderable
 {
@@ -12,6 +13,5 @@ public:
 	Edge* e2;
 
 	Triangle();
-	~Triangle();
 	Triangle(Edge*, Edge*, Edge*);
 };

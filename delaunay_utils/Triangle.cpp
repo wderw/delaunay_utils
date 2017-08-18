@@ -15,10 +15,6 @@ Triangle::Triangle()
 	IRenderable::mutex.unlock();
 }
 
-Triangle::~Triangle()
-{
-}
-
 Triangle::Triangle(Edge *e0, Edge *e1, Edge *e2) : Triangle()
 {
 	this->e0 = e0;

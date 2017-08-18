@@ -54,8 +54,9 @@ int main()
 		file >> points[i].y;
 		file >> points[i].z;
 	}
+	
 
-	/* losuj punkty
+	/* losuj punkty 
 	for (int i = 0; i < vertexCount; ++i)
 	{
 		double quakex = static_cast <double> (rand()) / static_cast <double> (RAND_MAX);
@@ -63,9 +64,10 @@ int main()
 		double quakez = static_cast <double> (rand()) / static_cast <double> (RAND_MAX);
 		points[i].x = quakex + rand() % 1000;
 		points[i].y = quakey + rand() % 1000;
-		points[i].z = 1.0;// quakez + rand() % 1000;
+		points[i].z = rand() % 255;// quakez + rand() % 1000;
 	}
 	*/
+	
 
 	/* zmierz czas wykonania */
 	clock_t begin = clock();
@@ -79,7 +81,7 @@ int main()
 	std::cout << "elapsed time: " << elapsed_secs << std::endl;
 
 
-	/* wypisz wyniki do pliku: plik trzeba wczesniej usunac (TODO: tryb overwrite) */
+	/* wypisz wyniki do pliku: plik trzeba wczesniej usunac (TODO: tryb overwrite) 
 	std::ofstream myfile;
 	myfile.open("triangles.txt", std::ios::out);
 
@@ -99,6 +101,8 @@ int main()
 		myfile << result[i].z3 << std::endl;
 	}
 	myfile.close();
+	*/
+
 	/* -------------------------------------------------------------*/
 
 	// zaladuj fonty
@@ -212,6 +216,24 @@ int main()
 		// rysowanie
 		window.clear(sf::Color(CUSTOM_BLACK));
 
+		/* wyswietl trojkaty po wysokosci Z */
+		sf::VertexArray triangle(sf::Triangles, 3);
+
+		for (int i = 0; i < resultsize; i++)
+		{
+			triangle[0].position = sf::Vector2f(result[i].x1, result[i].y1);
+			triangle[1].position = sf::Vector2f(result[i].x2, result[i].y2);
+			triangle[2].position = sf::Vector2f(result[i].x3, result[i].y3);
+
+
+			triangle[0].color = sf::Color(result[i].z1, result[i].z1, result[i].z1);
+			triangle[1].color = sf::Color(result[i].z2, result[i].z2, result[i].z2);
+			triangle[2].color = sf::Color(result[i].z3, result[i].z3, result[i].z3);
+
+			window.draw(triangle);
+		}
+
+		/* wyswietl krawedzie trojkatow */
 		for (int i = 0; i < resultsize; i++)
 		{
 			sf::Vertex line0[] =
@@ -235,7 +257,7 @@ int main()
 			window.draw(line0, 2, sf::Lines);
 			window.draw(line1, 2, sf::Lines);
 			window.draw(line2, 2, sf::Lines);
-		}
+		}	
 
 		// wyswietl informacje o aktualnie podswiedlonych wierzcholkach
 		size_t n = std::count(mousePosText.getString().begin(), mousePosText.getString().end(), '\n');
