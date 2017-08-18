@@ -17,7 +17,6 @@ triangleptr DELAUNAYLIBRARY_API delaunay_dc(point_t* input, int input_size, int 
 
 	std::vector<triangle_t*> result;
 
-
 	Utils::dt_dewall(pointset, AFL, 0);
 	
 	triangle_t* output = new triangle_t[IRenderable::triangles.size()];
@@ -38,7 +37,7 @@ triangleptr DELAUNAYLIBRARY_API delaunay_dc(point_t* input, int input_size, int 
 
 		output[i].x2 = t->e1->v1->position.x;
 		output[i].y2 = t->e1->v1->position.y;
-		output[i].z2 = t->e0->v1->z;
+		output[i].z2 = t->e1->v1->z;
 
 		output[i].x3 = t->e2->v1->position.x;
 		output[i].y3 = t->e2->v1->position.y;

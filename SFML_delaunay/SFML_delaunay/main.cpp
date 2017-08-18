@@ -44,6 +44,17 @@ int main()
 	const int vertexCount = 112;
 	point_t* points = new point_t[vertexCount];
 
+	/* wczytaj punkty z pliku */
+	std::ifstream file;
+	file.open("delaunay.xyz", std::ios::in);
+	for (int i = 0; i < 112; i++)
+	{
+		file >> points[i].x;
+		file >> points[i].y;
+		file >> points[i].z;
+	}
+
+	/* losuj punkty
 	for (int i = 0; i < vertexCount; ++i)
 	{
 		double quakex = static_cast <double> (rand()) / static_cast <double> (RAND_MAX);
@@ -53,7 +64,9 @@ int main()
 		points[i].y = quakey + rand() % 1000;
 		points[i].z = 1.0;// quakez + rand() % 1000;
 	}
+	*/
 
+	/* zmierz czas wykonania */
 	clock_t begin = clock();
 	int resultsize = -1;
 	double volume = 6.66;
@@ -63,6 +76,28 @@ int main()
 	clock_t end = clock();
 	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC * 1000;
 	std::cout << "elapsed time: " << elapsed_secs << std::endl;
+
+
+	/* wypisz wyniki do pliku: plik trzeba wczesniej usunac (TODO: tryb overwrite) */
+	std::ofstream myfile;
+	myfile.open("triangles.txt");
+
+	for (int i = 0; i < resultsize; i++)
+	{
+		myfile << std::fixed;
+		myfile << result[i].x1 << std::endl;
+		myfile << result[i].y1 << std::endl;
+		myfile << result[i].z1 << std::endl;
+
+		myfile << result[i].x2 << std::endl;
+		myfile << result[i].y2 << std::endl;
+		myfile << result[i].z2 << std::endl;
+
+		myfile << result[i].x3 << std::endl;
+		myfile << result[i].y3 << std::endl;
+		myfile << result[i].z3 << std::endl;
+	}
+	myfile.close();
 	/* -------------------------------------------------------------*/
 
 	// zaladuj fonty
@@ -90,11 +125,11 @@ int main()
 	mousePosText.setStyle(sf::Text::Bold | sf::Text::Regular);
 	mousePosText.setPosition(static_cast<double>(mousePosText.getCharacterSize()), static_cast<double>(windowSize.y) - mousePosText.getCharacterSize() * 2);
 
-	/* przesun widok w konkretne miejsce:
+	/* przesun widok w konkretne miejsce */
 	sf::View view;
 	view.move(5.56804e+06, 7.50466e+06);
 	window.setView(view);
-	*/
+	
 	
 	// petla komunikatow i obsluga zdarzen
 	double moveValue = 1.0;
@@ -175,6 +210,22 @@ int main()
 
 		// rysowanie
 		window.clear(sf::Color(CUSTOM_BLACK));
+
+		sf::Vertex edges[3];
+
+		for (int i = 0; i < resultsize; i++)
+		{
+			edges[0].position.x = result[i].x1;
+			edges[0].position.y = result[i].y1;
+
+			edges[1].position.x = result[i].x2;
+			edges[1].position.y = result[i].y2;
+
+			edges[2].position.x = result[i].x3;
+			edges[2].position.y = result[i].y3;
+
+			window.draw(edges, 3, sf::LineStrip);
+		}
 
 		// wyswietl informacje o aktualnie podswiedlonych wierzcholkach
 		size_t n = std::count(mousePosText.getString().begin(), mousePosText.getString().end(), '\n');

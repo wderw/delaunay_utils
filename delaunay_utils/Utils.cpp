@@ -471,18 +471,15 @@ inline Triangle* Utils::MakeFirstSimplex(std::vector<Vertex*>& pointset, double 
 		}
 	}
 
-	Edge* f = new Edge(p1, p2);
+	Edge* f = new Edge(p1, p3);
 	Edge* f2 = new Edge(p2, p3);
-	Edge* f3 = new Edge(p3, p1);
+	Edge* f3 = new Edge(p1, p2);
 
 	Vector centerOfMass = Utils::CenterOfMass(p1, p2, p3);
 
 	f->setOrigin(centerOfMass);
 	f2->setOrigin(centerOfMass);
 	f3->setOrigin(centerOfMass);
-
-	
-
 
 	return new Triangle(f, f2, f3);
 }

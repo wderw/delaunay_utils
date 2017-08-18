@@ -1,14 +1,9 @@
-﻿  delaunay_utils.cpp
-delaunay_utils.cpp(26): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-  Edge.cpp
-  IRenderable.cpp
-  Triangle.cpp
-  Utils.cpp
+﻿  Utils.cpp
 Utils.cpp(12): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-  Vector.cpp
-  Vertex.cpp
      Creating library C:\Users\paran\documents\visual studio 2017\Projects\delaunay_utils\x64\Release\delaunay_utils.lib and object C:\Users\paran\documents\visual studio 2017\Projects\delaunay_utils\x64\Release\delaunay_utils.exp
   Generating code
-  All 537 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  14 of 537 functions ( 2.6%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    1 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   delaunay_utils.vcxproj -> C:\Users\paran\documents\visual studio 2017\Projects\delaunay_utils\x64\Release\delaunay_utils.dll
