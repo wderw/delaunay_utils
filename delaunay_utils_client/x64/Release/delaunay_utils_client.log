@@ -1,8 +1,6 @@
 ﻿  main.cpp
 main.cpp(58): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
   Generating code
-  2 of 147 functions ( 1.4%) were compiled, the rest were copied from previous compilation.
-    1 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+  All 147 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   Finished generating code
   delaunay_utils_client.vcxproj -> C:\Users\paran\documents\visual studio 2017\Projects\delaunay_utils\x64\Release\delaunay_utils_client.exe

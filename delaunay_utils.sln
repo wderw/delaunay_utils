@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "delaunay_utils", "delaunay_utils\delaunay_utils.vcxproj", "{45FB43F5-D00D-4EA8-BB21-84CE89656CA0}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "delaunay_utils_client", "delaunay_utils_client\delaunay_utils_client.vcxproj", "{24468A5E-2E27-4F01-82E2-8F0819141E94}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "delaunay_utils_sfml", "SFML_delaunay\SFML_delaunay\SFML_delaunay.vcxproj", "{A47F540C-2220-4B25-8BBB-FBF7A2A78F34}"
 	ProjectSection(ProjectDependencies) = postProject
 		{45FB43F5-D00D-4EA8-BB21-84CE89656CA0} = {45FB43F5-D00D-4EA8-BB21-84CE89656CA0}
 	EndProjectSection
@@ -26,14 +26,14 @@ Global
 		{45FB43F5-D00D-4EA8-BB21-84CE89656CA0}.Release|x64.Build.0 = Release|x64
 		{45FB43F5-D00D-4EA8-BB21-84CE89656CA0}.Release|x86.ActiveCfg = Release|Win32
 		{45FB43F5-D00D-4EA8-BB21-84CE89656CA0}.Release|x86.Build.0 = Release|Win32
-		{24468A5E-2E27-4F01-82E2-8F0819141E94}.Debug|x64.ActiveCfg = Debug|x64
-		{24468A5E-2E27-4F01-82E2-8F0819141E94}.Debug|x64.Build.0 = Debug|x64
-		{24468A5E-2E27-4F01-82E2-8F0819141E94}.Debug|x86.ActiveCfg = Debug|Win32
-		{24468A5E-2E27-4F01-82E2-8F0819141E94}.Debug|x86.Build.0 = Debug|Win32
-		{24468A5E-2E27-4F01-82E2-8F0819141E94}.Release|x64.ActiveCfg = Release|x64
-		{24468A5E-2E27-4F01-82E2-8F0819141E94}.Release|x64.Build.0 = Release|x64
-		{24468A5E-2E27-4F01-82E2-8F0819141E94}.Release|x86.ActiveCfg = Release|Win32
-		{24468A5E-2E27-4F01-82E2-8F0819141E94}.Release|x86.Build.0 = Release|Win32
+		{A47F540C-2220-4B25-8BBB-FBF7A2A78F34}.Debug|x64.ActiveCfg = Debug|x64
+		{A47F540C-2220-4B25-8BBB-FBF7A2A78F34}.Debug|x64.Build.0 = Debug|x64
+		{A47F540C-2220-4B25-8BBB-FBF7A2A78F34}.Debug|x86.ActiveCfg = Debug|Win32
+		{A47F540C-2220-4B25-8BBB-FBF7A2A78F34}.Debug|x86.Build.0 = Debug|Win32
+		{A47F540C-2220-4B25-8BBB-FBF7A2A78F34}.Release|x64.ActiveCfg = Release|x64
+		{A47F540C-2220-4B25-8BBB-FBF7A2A78F34}.Release|x64.Build.0 = Release|x64
+		{A47F540C-2220-4B25-8BBB-FBF7A2A78F34}.Release|x86.ActiveCfg = Release|Win32
+		{A47F540C-2220-4B25-8BBB-FBF7A2A78F34}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
