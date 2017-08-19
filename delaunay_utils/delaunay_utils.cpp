@@ -16,7 +16,7 @@ triangleptr DELAUNAYLIBRARY_API delaunay_dc(point_t* input, int input_size, int 
 	}
 
 	std::vector<triangle_t*> result;
-
+	Utils::recursiveDepth = pointset.size() < 100 ? 0 : Utils::recursiveDepth;
 	Utils::dt_dewall(pointset, AFL, 0);
 	
 	triangle_t* output = new triangle_t[IRenderable::triangles.size()];

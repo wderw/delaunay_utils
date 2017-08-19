@@ -42,7 +42,7 @@ int main()
 	}
 
 	/* ----------------------- test biblioteki ----------------------*/
-	const int vertexCount = 1000;
+	const int vertexCount = 80;
 	point_t* points = new point_t[vertexCount];
 
 	/* wczytaj punkty z pliku 
