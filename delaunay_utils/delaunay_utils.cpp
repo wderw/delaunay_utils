@@ -11,7 +11,7 @@ triangleptr DELAUNAYLIBRARY_API delaunay_dc(point_t* input, int input_size, int 
 	int i;
 	for (i = 0; i < input_size; ++i)
 	{
-		Vertex* vertex = new Vertex(input[i].x, input[i].y, input[i].z);
+		Vertex* vertex = new Vertex(input[i].x, input[i].y, input[i].z, i);
 		pointset.push_back(vertex);
 	}
 
@@ -24,13 +24,14 @@ triangleptr DELAUNAYLIBRARY_API delaunay_dc(point_t* input, int input_size, int 
 	// return the output size
 	output_size = IRenderable::triangles.size();
 
-	
+	/* wypisuj wartosci wierzcholkow i indeksow */
 	Triangle* t = nullptr;
 	double totalVolume = 0.0;
 
 	for (int i = 0; i < IRenderable::triangles.size(); i++)
 	{
 		t = IRenderable::triangles[i];
+
 		output[i].x1 = t->e0->v2->position.x;
 		output[i].y1 = t->e0->v2->position.y;
 		output[i].z1 = t->e0->v2->z;
@@ -58,9 +59,14 @@ triangleptr DELAUNAYLIBRARY_API delaunay_dc(point_t* input, int input_size, int 
 		z3 = output[i].z3;
 
 		totalVolume += (z1 + z2 + z3)*(abs(x1*y2 - x2*y1 + x2*y3 - x3*y2 + x3*y1 - x1*y3)) / 6;
+		
 
+		output[i].i1 = t->e0->v2->index;
+		output[i].i2 = t->e1->v1->index;
+		output[i].i3 = t->e2->v1->index;		
 	}
 	volume = totalVolume;
+	
 
 	/* wyczysc pamiec */
 	for (int i = 0; i < IRenderable::triangles.size(); i++)

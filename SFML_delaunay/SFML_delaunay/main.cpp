@@ -42,21 +42,21 @@ int main()
 	}
 
 	/* ----------------------- test biblioteki ----------------------*/
-	const int vertexCount = 112;
+	const int vertexCount = 1000;
 	point_t* points = new point_t[vertexCount];
 
-	/* wczytaj punkty z pliku */
+	/* wczytaj punkty z pliku 
 	std::ifstream file;
 	file.open("delaunay.xyz", std::ios::in);
-	for (int i = 0; i < 112; i++)
+	for (int i = 0; i < vertexCount; i++)
 	{
 		file >> points[i].x;
 		file >> points[i].y;
 		file >> points[i].z;
 	}
-	
+	*/
 
-	/* losuj punkty 
+	/* losuj punkty */
 	for (int i = 0; i < vertexCount; ++i)
 	{
 		double quakex = static_cast <double> (rand()) / static_cast <double> (RAND_MAX);
@@ -66,22 +66,24 @@ int main()
 		points[i].y = quakey + rand() % 1000;
 		points[i].z = rand() % 255;// quakez + rand() % 1000;
 	}
-	*/
+	
 	
 
-	/* zmierz czas wykonania */
-	clock_t begin = clock();
+	/* zmierz czas wykonania */	
 	int resultsize = -1;
 	double volume = 6.66;
+
+	clock_t begin = clock();
 	triangle_t* result = delaunay_dc(points, vertexCount, resultsize, volume);
+	clock_t end = clock();
+
 	std::cout << "resultsize: " << resultsize << std::endl;
 	std::cout << "volume: " << volume << std::endl;
-	clock_t end = clock();
 	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC * 1000;
 	std::cout << "elapsed time: " << elapsed_secs << std::endl;
 
 
-	/* wypisz wyniki do pliku: plik trzeba wczesniej usunac (TODO: tryb overwrite) 
+	/* wypisz wyniki do pliku: plik trzeba wczesniej usunac (TODO: tryb overwrite) */
 	std::ofstream myfile;
 	myfile.open("triangles.txt", std::ios::out);
 
@@ -91,17 +93,20 @@ int main()
 		myfile << result[i].x1 << std::endl;
 		myfile << result[i].y1 << std::endl;
 		myfile << result[i].z1 << std::endl;
+		myfile << result[i].i1 << std::endl;
 
 		myfile << result[i].x2 << std::endl;
 		myfile << result[i].y2 << std::endl;
 		myfile << result[i].z2 << std::endl;
+		myfile << result[i].i2 << std::endl;
 
 		myfile << result[i].x3 << std::endl;
 		myfile << result[i].y3 << std::endl;
 		myfile << result[i].z3 << std::endl;
+		myfile << result[i].i3 << std::endl;
 	}
 	myfile.close();
-	*/
+	
 
 	/* -------------------------------------------------------------*/
 
@@ -130,11 +135,11 @@ int main()
 	mousePosText.setStyle(sf::Text::Bold | sf::Text::Regular);
 	mousePosText.setPosition(static_cast<double>(mousePosText.getCharacterSize()), static_cast<double>(windowSize.y) - mousePosText.getCharacterSize() * 2);
 
-	/* przesun widok w konkretne miejsce */
+	/* przesun widok w konkretne miejsce
 	sf::View view;
-	view.move(5.56804e+06, 7.50466e+06);
+	view.move(points[0].x, points[0].y);
 	window.setView(view);
-	
+	*/
 	
 	// petla komunikatow i obsluga zdarzen
 	double moveValue = 1.0;
@@ -216,7 +221,7 @@ int main()
 		// rysowanie
 		window.clear(sf::Color(CUSTOM_BLACK));
 
-		/* wyswietl trojkaty po wysokosci Z */
+		/* wyswietl trojkaty po wysokosci Z 
 		sf::VertexArray triangle(sf::Triangles, 3);
 
 		for (int i = 0; i < resultsize; i++)
@@ -232,8 +237,10 @@ int main()
 
 			window.draw(triangle);
 		}
+		*/
 
-		/* wyswietl krawedzie trojkatow */
+
+		/* wyswietl krawedzie trojkatow po wspolrzednych (V1)
 		for (int i = 0; i < resultsize; i++)
 		{
 			sf::Vertex line0[] =
@@ -257,7 +264,34 @@ int main()
 			window.draw(line0, 2, sf::Lines);
 			window.draw(line1, 2, sf::Lines);
 			window.draw(line2, 2, sf::Lines);
-		}	
+		}			
+		*/
+
+		/* wyswietl krawedzie trojkatow po indeksach (V2) */
+		for (int i = 0; i < resultsize; i++)
+		{
+			sf::Vertex line0[] =
+			{
+				sf::Vertex(sf::Vector2f(points[result[i].i1].x, points[result[i].i1].y),sf::Color::White),
+				sf::Vertex(sf::Vector2f(points[result[i].i2].x, points[result[i].i2].y),sf::Color::White)
+			};
+
+			sf::Vertex line1[] =
+			{
+				sf::Vertex(sf::Vector2f(points[result[i].i2].x, points[result[i].i2].y),sf::Color::White),
+				sf::Vertex(sf::Vector2f(points[result[i].i3].x, points[result[i].i3].y),sf::Color::White)
+			};
+
+			sf::Vertex line2[] =
+			{
+				sf::Vertex(sf::Vector2f(points[result[i].i3].x, points[result[i].i3].y),sf::Color::White),
+				sf::Vertex(sf::Vector2f(points[result[i].i1].x, points[result[i].i1].y),sf::Color::White)
+			};
+
+			window.draw(line0, 2, sf::Lines);
+			window.draw(line1, 2, sf::Lines);
+			window.draw(line2, 2, sf::Lines);
+		}
 
 		// wyswietl informacje o aktualnie podswiedlonych wierzcholkach
 		size_t n = std::count(mousePosText.getString().begin(), mousePosText.getString().end(), '\n');
