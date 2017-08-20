@@ -14,7 +14,6 @@ extern "C"
 	triangleptr DELAUNAYLIBRARY_API delaunay_dc(point_t* input, int input_size, int &output_size,double& volume);
 }
 
-
 //#pragma argsused
 int WINAPI DllEntryPoint(HINSTANCE hinst, unsigned long reason, void* lpReserved)
 {

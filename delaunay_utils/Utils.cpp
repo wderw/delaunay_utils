@@ -45,6 +45,7 @@ inline void Utils::SortByY(std::vector<Vertex*>& pointset)
 {
 	std::sort(pointset.begin(), pointset.end(), VertexComparatorY);
 }
+
 // funkcja sprawdza czy punkty p oraz cp leza po tej samej stronie linii
 // wyznaczanej przez wektor f
 // przypadek w ktorym punkt cp lub p leza na linii(f) moze powodowac problemy
@@ -73,7 +74,6 @@ inline int Utils::SameHalfspaceTest(Edge * f, Vertex * p, Vector &cp)
 		return 0;
 	}
 }
-
 
 inline Vector Utils::CenterOfMass(Vertex * a, Vertex * b, Vertex * c)
 {
@@ -504,8 +504,6 @@ inline double Utils::DelaunayDistance(Edge * f, Vertex * p)
 	else return DBL_MAX;
 }
 
-
-
 inline bool Utils::ContainsEdge(std::vector<Edge*>& edges, Edge* f)
 {
 	for (int i = 0; i < edges.size(); ++i)
@@ -547,6 +545,7 @@ inline bool Utils::IsIntersected(Vertex* v1, Vertex* v2, double alfa)
 		return false;
 	}
 }
+
 inline bool Utils::IsIntersectedY(Vertex* v1, Vertex* v2, double alfa)
 {
 	if (v1->position.y < alfa && v2->position.y >= alfa)
@@ -642,7 +641,6 @@ void  Utils::EvaluateTriangle(int i, int j, int k, std::vector<Vertex*>& pointse
 	Edge* e1 = new Edge(pointset[j], pointset[k]);
 	Edge* e2 = new Edge(pointset[k], pointset[i]);
 }
-
 
 std::vector<Edge*> Utils::dt_bruteforce(std::vector<Vertex*>& pointset)
 {

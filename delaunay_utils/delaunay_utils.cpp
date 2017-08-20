@@ -16,21 +16,33 @@ triangleptr DELAUNAYLIBRARY_API delaunay_dc(point_t* input, int input_size, int 
 	}
 
 	std::vector<triangle_t*> result;
-	Utils::recursiveDepth = pointset.size() < 100 ? 0 : Utils::recursiveDepth;
+	Utils::recursiveDepth = pointset.size() < PARALLEL_THRESHOLD ? 0 : Utils::recursiveDepth;
 	Utils::dt_dewall(pointset, AFL, 0);
 	
-	triangle_t* output = new triangle_t[IRenderable::triangles.size()];
+	triangle_t* output = new triangle_t[Triangle::triangles.size()];
 
 	// return the output size
-	output_size = IRenderable::triangles.size();
+	output_size = Triangle::triangles.size();
 
 	/* wypisuj wartosci wierzcholkow i indeksow */
 	Triangle* t = nullptr;
+	Vertex* vertexMinZ = nullptr;
 	double totalVolume = 0.0;
 
-	for (int i = 0; i < IRenderable::triangles.size(); i++)
+	// policz objetosc wzgledem plaszczyzny z = zmin
+	double minZ = DBL_MAX;
+	for (int i = 0; i < pointset.size(); ++i)
 	{
-		t = IRenderable::triangles[i];
+		vertexMinZ = pointset[i];
+		if (vertexMinZ->z < minZ)
+		{
+			minZ = vertexMinZ->z;
+		}
+	}
+
+	for (int i = 0; i < Triangle::triangles.size(); ++i)
+	{
+		t = Triangle::triangles[i];
 
 		output[i].x1 = t->e0->v2->position.x;
 		output[i].y1 = t->e0->v2->position.y;
@@ -48,40 +60,39 @@ triangleptr DELAUNAYLIBRARY_API delaunay_dc(point_t* input, int input_size, int 
 
 		x1 = output[i].x1;
 		y1 = output[i].y1;
-		z1 = output[i].z1;
+		//z1 = output[i].z1;
+		z1 = output[i].z1 - minZ;
 
 		x2 = output[i].x2;
 		y2 = output[i].y2;
-		z2 = output[i].z2;
+		//z2 = output[i].z2;
+		z2 = output[i].z2 - minZ;
 
 		x3 = output[i].x3;
 		y3 = output[i].y3;
-		z3 = output[i].z3;
+		//z3 = output[i].z3;
+		z3 = output[i].z3 - minZ;		
 
-		totalVolume += (z1 + z2 + z3)*(abs(x1*y2 - x2*y1 + x2*y3 - x3*y2 + x3*y1 - x1*y3)) / 6;
-		
+		totalVolume += (z1 + z2 + z3)*(abs(x1*y2 - x2*y1 + x2*y3 - x3*y2 + x3*y1 - x1*y3)) / 6;		
 
 		output[i].i1 = t->e0->v2->index;
 		output[i].i2 = t->e1->v1->index;
 		output[i].i3 = t->e2->v1->index;		
 	}
-	volume = totalVolume;
-	
+	volume = totalVolume;	
 
 	/* wyczysc pamiec */
-	for (int i = 0; i < IRenderable::triangles.size(); i++)
+	for (int i = 0; i < Triangle::triangles.size(); i++)
 	{
-		delete IRenderable::triangles[i];
+		delete Triangle::triangles[i];
 	}
-	IRenderable::triangles.clear();
-	
+	Triangle::triangles.clear();	
 
 	for (int i = 0; i < Edge::allEdges.size(); i++)
 	{
 		delete Edge::allEdges[i];
 	}
 	Edge::allEdges.clear();
-
 
 	for (int i = 0; i < pointset.size(); i++)
 	{

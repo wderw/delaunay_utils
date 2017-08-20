@@ -1,7 +1,6 @@
 #pragma once
 
 #include "common.h"
-#include "IRenderable.h"
 #include "Vector.h"
 
 class Vertex
@@ -9,9 +8,12 @@ class Vertex
 public:
 	static std::vector<Vertex*> vertices;
 
+	// pozycja na plaszczyznie w postaci wektora 2d
+	// i jego uzupelnienia w postaci wysokosci (z)
 	Vector position;
 	double z;
 
+	// indeks wierzcholka w wejsciowej tablicy danych
 	int index;
 
 	Vertex();

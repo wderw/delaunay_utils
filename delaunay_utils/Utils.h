@@ -1,13 +1,13 @@
 #pragma once
 
 #include "common.h"
-#include "IRenderable.h"
 #include "Vector.h"
 
 // rozne narzedzia pomocnicze
 class Utils
 {
 public:
+	// informuje jak wiele wywolan rekurencyjnych ma byc rozdzielanych na 2 kolejne watki
 	static int recursiveDepth;
 
 	// 1. misc
@@ -23,6 +23,7 @@ public:
 		a = temp;
 	}
 
+	// sortowanie
 	static bool VertexComparatorX(Vertex* A, Vertex* B);
 	static void SortByX(std::vector<Vertex*>& pointset);
 	static bool VertexComparatorY(Vertex* A, Vertex* B);

@@ -12,7 +12,7 @@
 #define M_PI (3.14159265358979323846)
 #endif
 
-#define FIRST_SIMPLEX_OFFSET_EPSILON 0.0000000000001
+#define PARALLEL_THRESHOLD 1000
 
 // narzedzia
 class Utils;

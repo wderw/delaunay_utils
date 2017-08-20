@@ -1,13 +1,16 @@
 #pragma once
 
 #include "common.h"
-#include "IRenderable.h"
 #include "Edge.h"
 #include <memory>
+#include <mutex>
 
-class Triangle : public IRenderable
+class Triangle
 {
 public:
+	static std::mutex mutex;
+	static std::vector<Triangle*> triangles;
+
 	Edge* e0;
 	Edge* e1;
 	Edge* e2;

@@ -18,12 +18,12 @@
 int main()
 {
 	int cores = std::thread::hardware_concurrency();
-	int recurrenceDepth = log2(cores);
+	int recurrenceDepth = static_cast<int>(log2(cores));
 	printf("recurrenceDepth: %d\n", recurrenceDepth);
 
 	time_t randomSeed = time(NULL);
 	srand(randomSeed);
-	printf("seed: %d\n", randomSeed);
+	printf("seed: %I64d\n", randomSeed);	
 
 	// zaladuj biblioteke
 	HINSTANCE hGetProcIDDLL = LoadLibrary("delaunay_utils.dll");
@@ -42,7 +42,7 @@ int main()
 	}
 
 	/* ----------------------- test biblioteki ----------------------*/
-	const int vertexCount = 80;
+	const int vertexCount = 400;
 	point_t* points = new point_t[vertexCount];
 
 	/* wczytaj punkty z pliku 
@@ -64,10 +64,8 @@ int main()
 		double quakez = static_cast <double> (rand()) / static_cast <double> (RAND_MAX);
 		points[i].x = quakex + rand() % 1000;
 		points[i].y = quakey + rand() % 1000;
-		points[i].z = rand() % 255;// quakez + rand() % 1000;
-	}
-	
-	
+		points[i].z = rand() % 255 + 200;// quakez + rand() % 1000;
+	}	
 
 	/* zmierz czas wykonania */	
 	int resultsize = -1;
@@ -83,7 +81,7 @@ int main()
 	std::cout << "elapsed time: " << elapsed_secs << std::endl;
 
 
-	/* wypisz wyniki do pliku: plik trzeba wczesniej usunac (TODO: tryb overwrite) */
+	/* wypisz wyniki do pliku: plik trzeba wczesniej usunac (TODO: tryb overwrite) 
 	std::ofstream myfile;
 	myfile.open("triangles.txt", std::ios::out);
 
@@ -106,7 +104,7 @@ int main()
 		myfile << result[i].i3 << std::endl;
 	}
 	myfile.close();
-	
+	*/
 
 	/* -------------------------------------------------------------*/
 
