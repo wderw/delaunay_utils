@@ -34,6 +34,14 @@ int main()
 		return EXIT_FAILURE;
 	}
 
+	// funkcje
+	auto volume = (pVolume)GetProcAddress(hGetProcIDDLL, "volume");
+	if (!volume)
+	{
+		std::cout << "could not locate the function" << std::endl;
+		return EXIT_FAILURE;
+	}
+
 	auto delaunay_dc = (pDelaunayDC)GetProcAddress(hGetProcIDDLL, "delaunay_dc");
 	if (!delaunay_dc)
 	{
@@ -42,21 +50,21 @@ int main()
 	}
 
 	/* ----------------------- test biblioteki ----------------------*/
-	const int vertexCount = 400;
+	const int vertexCount = 5;
 	point_t* points = new point_t[vertexCount];
 
-	/* wczytaj punkty z pliku 
+	/* wczytaj punkty z pliku */
 	std::ifstream file;
-	file.open("delaunay.xyz", std::ios::in);
+	file.open("delaunay000.xyz", std::ios::in);
 	for (int i = 0; i < vertexCount; i++)
 	{
 		file >> points[i].x;
 		file >> points[i].y;
 		file >> points[i].z;
 	}
-	*/
+	
 
-	/* losuj punkty */
+	/* losuj punkty 
 	for (int i = 0; i < vertexCount; ++i)
 	{
 		double quakex = static_cast <double> (rand()) / static_cast <double> (RAND_MAX);
@@ -64,24 +72,28 @@ int main()
 		double quakez = static_cast <double> (rand()) / static_cast <double> (RAND_MAX);
 		points[i].x = quakex + rand() % 1000;
 		points[i].y = quakey + rand() % 1000;
-		points[i].z = rand() % 255 + 200;// quakez + rand() % 1000;
+		points[i].z = 1.0;
+		//rand() % 255 + 200; quakez + rand() % 1000;
 	}	
+	*/
 
 	/* zmierz czas wykonania */	
 	int resultsize = -1;
-	double volume = 6.66;
+	double vol = 6.66;
 
 	clock_t begin = clock();
-	triangle_t* result = delaunay_dc(points, vertexCount, resultsize, volume);
+	triangle_t* result = delaunay_dc(points, vertexCount, resultsize);
 	clock_t end = clock();
 
+	vol = volume(result, resultsize);
+
 	std::cout << "resultsize: " << resultsize << std::endl;
-	std::cout << "volume: " << volume << std::endl;
+	std::cout << "volume: " << vol << std::endl;
 	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC * 1000;
 	std::cout << "elapsed time: " << elapsed_secs << std::endl;
 
 
-	/* wypisz wyniki do pliku: plik trzeba wczesniej usunac (TODO: tryb overwrite) 
+	/* wypisz wyniki do pliku:
 	std::ofstream myfile;
 	myfile.open("triangles.txt", std::ios::out);
 
@@ -238,7 +250,7 @@ int main()
 		*/
 
 
-		/* wyswietl krawedzie trojkatow po wspolrzednych (V1)
+		/* wyswietl krawedzie trojkatow po wspolrzednych (V1) */
 		for (int i = 0; i < resultsize; i++)
 		{
 			sf::Vertex line0[] =
@@ -263,9 +275,9 @@ int main()
 			window.draw(line1, 2, sf::Lines);
 			window.draw(line2, 2, sf::Lines);
 		}			
-		*/
+		
 
-		/* wyswietl krawedzie trojkatow po indeksach (V2) */
+		/* wyswietl krawedzie trojkatow po indeksach (V2) 
 		for (int i = 0; i < resultsize; i++)
 		{
 			sf::Vertex line0[] =
@@ -290,6 +302,7 @@ int main()
 			window.draw(line1, 2, sf::Lines);
 			window.draw(line2, 2, sf::Lines);
 		}
+		*/
 
 		// wyswietl informacje o aktualnie podswiedlonych wierzcholkach
 		size_t n = std::count(mousePosText.getString().begin(), mousePosText.getString().end(), '\n');

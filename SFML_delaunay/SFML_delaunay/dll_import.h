@@ -18,4 +18,6 @@ struct triangle_t
 typedef triangle_t* triangleptr;
 
 // delegaty do funkcji
-typedef triangle_t*(*pDelaunayDC)(point_t*, int, int&, double&); 
+//typedef triangle_t*(*pDelaunayDC)(point_t*, int, int&, double&); 
+typedef triangle_t*(*pDelaunayDC)(point_t*, int, int&);
+typedef double(*pVolume)(triangleptr, int);
