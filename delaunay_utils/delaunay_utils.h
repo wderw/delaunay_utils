@@ -15,6 +15,8 @@
 //DllExport triangleptr delaunay_dc(point_t* input, int input_size, int &output_size,double& volume);
 DllExport triangleptr delaunay_dc(point_t* input, int input_size, int &output_size);
 DllExport double volume(triangleptr input, int input_size);
+DllExport void wyczysc(triangleptr input);
+DllExport void wyczysc2(triangleptr input, int size);
 
 //#pragma argsused
 int WINAPI DllEntryPoint(HINSTANCE hinst, unsigned long reason, void* lpReserved)

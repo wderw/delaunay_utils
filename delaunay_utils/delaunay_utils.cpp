@@ -104,6 +104,20 @@ DllExport triangleptr delaunay_dc(point_t* input, int input_size, int &output_si
 	return output;
 }
 */
+DllExport void wyczysc(triangleptr input)
+{
+	delete[] input;
+}
+
+DllExport void wyczysc2(triangleptr input, int size)
+{
+	for (int i = 0; i < size; ++i)
+	{
+		triangle_t* tri = &input[i];
+		delete tri;
+	}	
+}
+
 DllExport double volume(triangleptr input, int input_size)
 {
 	// wypisuj wartosci wierzcholkow i indeksow
